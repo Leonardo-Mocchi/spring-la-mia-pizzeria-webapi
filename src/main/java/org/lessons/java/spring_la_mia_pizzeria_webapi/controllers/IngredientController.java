@@ -1,7 +1,11 @@
 package org.lessons.java.spring_la_mia_pizzeria_webapi.controllers;
 
+import java.util.List;
+
 import org.lessons.java.spring_la_mia_pizzeria_webapi.model.Ingredient;
+import org.lessons.java.spring_la_mia_pizzeria_webapi.model.Pizza;
 import org.lessons.java.spring_la_mia_pizzeria_webapi.repository.IngredientsRepository;
+import org.lessons.java.spring_la_mia_pizzeria_webapi.repository.PizzasRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -20,6 +24,9 @@ public class IngredientController {
 
     @Autowired
     private IngredientsRepository ingredientRepository;
+
+    @Autowired
+    private PizzasRepository pizzaRepository;
 
     //? INDEX
     @GetMapping
@@ -54,8 +61,33 @@ public class IngredientController {
     }
 
     //? DELETE
+
+    //> old simple route (does not work)
+    /* @PostMapping("/delete/{id}")
+    public String delete(@PathVariable Integer id) {
+        ingredientRepository.deleteById(id);
+        return "redirect:/ingredients";
+    } */
+
     @PostMapping("/delete/{id}")
     public String delete(@PathVariable Integer id) {
+
+        for (Pizza pizza : pizzaRepository.findAll()) {
+
+            List<Ingredient> pizzaIngredientsList = pizza.getIngredients();
+
+            for (Ingredient ingredientToRemove : new java.util.ArrayList<>(pizzaIngredientsList)) {
+
+                if (ingredientToRemove.getId() == id) {
+                    pizzaIngredientsList.remove(ingredientToRemove);
+                }
+            }
+
+            // * SERVE A SALVARE LE PIZZE MODIFICATE PER NON AVERE PIù L'INGREDIENTE
+            pizzaRepository.save(pizza);
+        }
+
+        //* ORA CANCELLO L'INGREDIENTE
         ingredientRepository.deleteById(id);
         return "redirect:/ingredients";
     }

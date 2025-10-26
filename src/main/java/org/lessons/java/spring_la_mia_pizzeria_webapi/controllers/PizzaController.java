@@ -59,6 +59,7 @@ public class PizzaController {
             pizzas = pizzaRepository.findAll();
         }
         model.addAttribute("pizzas", pizzas);
+        model.addAttribute("searched", true);
         return "pizzas/index";
     }
 

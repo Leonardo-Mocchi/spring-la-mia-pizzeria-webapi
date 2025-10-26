@@ -25,14 +25,13 @@ body.loaded {
 
 .card {
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    transform: translateY(0);
 }
 
-.pizzas-page .card {
+.pizzas-page .card.lift-on-hover {
     transition: transform 0.3s ease, box-shadow 0.3s ease !important;
 }
 
-.pizzas-page .card:hover {
+.pizzas-page .card.lift-on-hover:hover {
     transform: translateY(-10px) !important;
     box-shadow: 0 12px 24px rgba(0, 0, 0, 0.3);
 }
@@ -41,8 +40,12 @@ body.loaded {
     transition: transform 0.3s ease !important;
 }
 
-.pizzas-page .card:hover .card-img-top {
+.pizzas-page .card.lift-on-hover:hover .card-img-top {
     transform: scale(1.05) !important;
+}
+
+.lift-on-hover {
+    will-change: transform;
 }
 
 .btn {
@@ -152,4 +155,16 @@ h3 {
     background: transparent;
     border: none;
     color: #ffd700;
+}
+
+.table td,
+.table th {
+    vertical-align: middle;
+}
+
+.table .btn,
+.table a.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
 }
