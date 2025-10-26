@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <th:block th:replace="~{fragments/resources :: headTags}" />
+    <title>Change a Pizza</title>
+</head>
+
+<body class="bg-light-subtle text-light" th:style="|background: linear-gradient(to bottom, rgba(0,0,0,0) 30%, rgba(0,0,0,0.9) 90%), url(https://www.dogtownpizza.com/wp-content/uploads/2022/04/iStock-1349560792-scaled.jpg) no-repeat center center fixed; background-size: cover;|">
+
+    <header>
+        <th:block th:replace="~{fragments/navbar :: navbar('home')}"></th:block>
+    </header>
+    <main>
+        <section class="container rounded-4 p-5 mt-5" style="background: rgba(33, 37, 41, 0.95); backdrop-filter: blur(10px); box-shadow: 0 10px 40px rgba(0, 0, 0, 0.7); border: 2px solid rgba(255, 193, 7, 0.3);">
+            <div class="text-center mb-4">
+                <i class="fas fa-edit display-3 text-warning mb-3"></i>
+                <h1 class="mb-3 fw-bold text-warning">Customize Your Pizza</h1>
+                <p class="lead text-light"><span class="fst-italic">*No assurances are made about price customization</span> 😉</p>
+            </div>
+
+            <!-- * form -->
+            <div class="container pt-3">
+                <form id="pizza-form" th:object="${pizza}" th:action="@{/pizzas/edit/{id} (id=*{id})}" method="post">
+                    <div class="mb-4">
+                        <label class="form-label fw-bold mb-2" for="name">
+                            <i class="fas fa-signature text-warning me-2"></i>Pizza Name:
+                        </label>
+                        <input class="form-control form-control-lg" type="text" id="name" th:field="*{name}" placeholder="e.g., Margherita Supreme" th:errorclass="is-invalid" style="border-radius: 10px;" />
+                        <div class="invalid-feedback" th:if="${#fields.hasErrors('name')}">
+                            <ul>
+                                <li th:each="error: ${#fields.errors('name')}" th:text="${error}" />
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="mb-4">
+                        <label class="form-label fw-bold mb-2" for="description">
+                            <i class="fas fa-align-left text-warning me-2"></i>Description:
+                        </label>
+                        <textarea class="form-control form-control-lg" id="description" th:field="*{description}" placeholder="e.g., A timeless classic that celebrates simplicity and fresh flavors" rows="3" th:errorclass="is-invalid" style="border-radius: 10px;"></textarea>
+                        <div class="invalid-feedback" th:if="${#fields.hasErrors('description')}">
+                            <ul>
+                                <li th:each="error: ${#fields.errors('description')}" th:text="${error}" />
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="mb-4">
+                        <label class="form-label fw-bold mb-2" for="picture">
+                            <i class="fas fa-image text-warning me-2"></i>Image URL:
+                        </label>
+                        <input class="form-control form-control-lg" type="text" id="picture" th:field="*{picture}" placeholder="https://example.com/pizza-image.jpg" th:errorclass="is-invalid" style="border-radius: 10px;" />
+                        <div class="invalid-feedback" th:if="${#fields.hasErrors('picture')}">
+                            <ul>
+                                <li th:each="error: ${#fields.errors('picture')}" th:text="${error}" />
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="mb-4">
+                        <label class="form-label fw-bold mb-2" for="price">
+                            <i class="fas fa-euro-sign text-warning me-2"></i>Suggested Price (€):
+                        </label>
+                        <input class="form-control form-control-lg" type="number" step="0.1" id="price" th:field="*{price}" placeholder="e.g., 12.50" th:errorclass="is-invalid" style="border-radius: 10px;" />
+                        <div class="invalid-feedback" th:if="${#fields.hasErrors('price')}">
+                            <ul>
+                                <li th:each="error: ${#fields.errors('price')}" th:text="${error}" />
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="mb-4">
+                        <label class="form-label fw-bold mb-3">
+                            <i class="fas fa-carrot text-warning me-2"></i>Ingredients:
+                        </label>
+                        <div class="row">
+                            <div class="col-md-4 col-sm-6 mb-2" th:each="ingredient : ${ingredientsList}">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" th:id="'ingredient-' + ${ingredient.id}" th:value="${ingredient.id}" th:field="*{ingredients}" />
+                                    <label class="form-check-label" th:for="'ingredient-' + ${ingredient.id}" th:text="${ingredient.name}"></label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <hr class="text-white my-4">
+
+                    <div class="mt-5 mb-3 d-flex justify-content-between gap-3">
+                        <button type="submit" class="btn btn-success btn-lg flex-grow-1" style="border-radius: 10px; font-weight: bold;">
+                            <i class="fas fa-check-circle me-2"></i>Save Changes
+                        </button>
+                        <button type="reset" class="btn btn-warning btn-lg flex-grow-1" style="border-radius: 10px; font-weight: bold;">
+                            <i class="fas fa-redo me-2"></i>Reset Fields
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+        </section>
+
+    </main>
+
+
+
+    <th:block th:replace="~{fragments/resources :: footerDisclaimer}" />
+    <th:block th:replace="~{fragments/resources :: popper}" />
+</body>
+
+</html>

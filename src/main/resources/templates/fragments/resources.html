@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+
+    <div th:fragment="headTags">
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link th:href="@{/webjars/bootstrap/css/bootstrap.min.css}" rel="stylesheet" />
+        <link th:href="@{/webjars/font-awesome/css/all.css}" rel="stylesheet" />
+        <link th:href="@{/css/custom-styles.css}" rel="stylesheet" />
+
+        <script>
+            document.documentElement.className = 'loaded';
+            document.addEventListener('DOMContentLoaded', function () {
+                document.body.className += ' loaded';
+            });
+        </script>
+
+        <div th:fragment="smallerPagesGradientFix">
+            <style>
+                html,
+                body {
+                    min-height: 100%;
+                }
+
+                body {
+                    background-attachment: fixed;
+                }
+            </style>
+        </div>
+    </div>
+
+
+
+
+    <title>Resources Fragment</title>
+
+</head>
+
+<body>
+
+
+    <footer th:fragment="footerDisclaimer" class="bg-black text-light text-center py-3 mt-5" style="position: fixed; bottom: 0; width: 100%; box-shadow: 0 -4px 10px rgba(0, 0, 0, 0.5); backdrop-filter: blur(5px); background: rgba(0, 0, 0, 0.9) !important;">
+        <small style="opacity: 0.8;">Disclaimer: All pizza images are for illustrative purposes only. Actual products may vary. All trademarks and images belong to their respective owners.</small>
+    </footer>
+    <script th:fragment="popper" th:src="@{/webjars/bootstrap/js/bootstrap.bundle.min.js}"></script>
+</body>
+
+</html>

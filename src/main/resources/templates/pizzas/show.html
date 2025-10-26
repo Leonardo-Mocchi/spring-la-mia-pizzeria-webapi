@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <th:block th:replace="~{fragments/resources :: headTags}" />
+    <title>Pizza [[${pizza.name}]]</title>
+</head>
+
+<body class="bg-light-subtle text-light" th:style="|background: linear-gradient(to bottom, rgba(0,0,0,0) 40%, rgba(0,0,0,1) 90%), url(${pizza.picture}) no-repeat center center fixed; background-size: cover;|">
+
+    <header>
+        <th:block th:replace="~{fragments/navbar :: navbar('show')}"></th:block>
+    </header>
+
+    <main class="d-flex flex-column" style="min-height: calc(100vh - 100px); padding-bottom: 100px;">
+
+        <!-- Collapsible offers removed: show a simple list instead -->
+        <div class=" d-flex justify-content-start text-center" style="min-height: 550px; padding: .5% 0 0 6%;">
+            <div style="max-width: 800px; background: radial-gradient(circle at center, rgba(0, 0, 0, 0.8) 20%, rgba(0, 0, 0, 0) 80%); backdrop-filter: blur(10px); border-radius: 20px; box-shadow: 0 10px 40px rgba(0, 0, 0, 0.7);" class="p-5 pb-0 mb-0 position-relative">
+
+                <div class="d-flex justify-content-center position-absolute top-0 start-0">
+                    <a name="" id="" class="btn btn-danger btn-lg px-4 rounded-3 fw-bold fs-5" th:href="@{/pizzas}" role="button">
+                        <i class="fas fa-arrow-left me-2"></i>Go back to the menu
+                    </a>
+                </div>
+
+                <h1 class="fw-bold pt-3 display-3" style="color: #ffd700; text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.9);">Pizza [[${pizza.name}]]</h1>
+
+                <h3 class="pt-4 text-light" style="text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);">
+                    <i class="fas fa-heart text-danger me-2"></i>
+                    Crafted with passion and tradition
+                </h3>
+
+                <p class="pt-4 text-warning fw-bold fs-5">
+                    <i class="fas fa-star me-2"></i>About this pizza:
+                </p>
+                <h5 class="fst-italic text-light mb-4" style="background: rgba(0, 0, 0, 0.5); padding: 1.5rem; border-radius: 10px; border-left: 4px solid #ffd700;">
+                    [[${pizza.description}]]
+                </h5>
+
+                <div th:if="${pizza.getIngredients() != null && pizza.getIngredients().size() > 0}" class="mb-4">
+                    <p class="pt-2 text-warning fw-bold fs-5">
+                        <i class="fas fa-carrot me-2"></i>Ingredients:
+                    </p>
+                    <div class="d-flex flex-wrap gap-2">
+                        <a th:each="ingredient : ${pizza.getIngredients()}" th:href="@{/ingredients/{id}(id=${ingredient.id})}" class="badge bg-warning text-dark fs-6 px-3 py-2 text-decoration-none" th:text="${ingredient.name}"></a>
+                    </div>
+                </div>
+
+                <div>
+                    <h2>Available Offers:</h2>
+
+                    <div th:if="${pizza.getOffers().size() > 0}">
+                        <ul class="list-group">
+                            <li th:each="offer : ${pizza.getOffers()}" class="list-group-item d-flex justify-content-between align-items-center bg-dark text-light border-black">
+                                <div>
+                                    <a th:href="@{/special-offers/{id}(id=${offer.id})}" class="text-decoration-none text-light">
+                                        <div class="fw-bold" th:text="${offer.title}">Offer title</div>
+                                        <div class="text-light small"><span th:text="${offer.offerFirstDay}">start</span> — <span th:text="${offer.offerLastDay}">end</span></div>
+                                    </a>
+                                </div>
+                                <div>
+                                    <a class="btn btn-warning btn-sm" th:href="@{/special-offers/edit/{id}(id=${offer.id})}">Edit</a>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div th:unless="${pizza.getOffers().size() > 0}" class="text-secondary">
+                        <p>No available Offers for this Pizza at the moment</p>
+                    </div>
+
+                    <hr>
+                    <div class="my-3 d-flex gap-2">
+                        <a class="btn btn-outline-light" th:href="@{/special-offers}">View all offers</a>
+                        <a class="btn btn-success fw-bold" th:href="@{/pizzas/{id}/special-offers(id=${pizza.id})}">
+                            Create a New SPECIAL Offer
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <th:block th:replace="~{fragments/resources :: footerDisclaimer}" />
+    <th:block th:replace="~{fragments/resources :: popper}" />
+</body>
+
+</html>

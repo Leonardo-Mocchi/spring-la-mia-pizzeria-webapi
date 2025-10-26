@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <th:block th:replace="~{fragments/resources :: headTags}" />
+    <title>Request a new Pizza</title>
+</head>
+
+<body class="bg-light-subtle text-light" th:style="|background: linear-gradient(to bottom, rgba(0,0,0,0) 30%, rgba(0,0,0,0.9) 90%), url(https://www.dogtownpizza.com/wp-content/uploads/2022/04/iStock-1349560792-scaled.jpg) no-repeat center center fixed; background-size: cover;|">
+
+    <header>
+        <th:block th:replace="~{fragments/navbar :: navbar('home')}"></th:block>
+    </header>
+
+    <main>
+        <section class="container rounded-4 p-5 mt-5" style="background: rgba(33, 37, 41, 0.95); backdrop-filter: blur(10px); box-shadow: 0 10px 40px rgba(0, 0, 0, 0.7); border: 2px solid rgba(255, 193, 7, 0.3);">
+            <div class="text-center mb-4">
+                <i class="fa-solid fa-tags display-3 text-warning mb-3"></i>
+                <h1 class="mb-3 fw-bold text-warning">Make us an Offer we can't refuse</h1>
+            </div>
+
+            <!-- * form -->
+            <div class="container pt-3">
+                <form id="pizza-form" th:object="${specialOffer}" th:action="${edit} ? @{|/special-offers/edit/${specialOffer.id}|} : @{/special-offers/create}" method="post">
+
+                    <input type="hidden" th:field="*{pizza}" id="linked-pizza">
+
+                    <div class="mb-3">
+                        <label class="form-label fw-bold mb-2 " for="title">
+                            <i class="fas fa-signature text-warning me-2"></i>Offer name:
+                        </label>
+                        <input class="form-control form-control-lg" type="text" id="title" th:field="*{title}" placeholder="e.g., Margherita Supreme" th:errorclass="is-invalid" style="border-radius: 10px;" />
+                        <div class="invalid-feedback" th:if="${#fields.hasErrors('title')}">
+                            <ul>
+                                <li th:each="error: ${#fields.errors('title')}" th:text="${error}" />
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label fw-bold mb-2" for="offerFirstDay">
+                            <i class="fa-regular fa-calendar-plus text-warning me-2"></i>Start date:
+                        </label>
+                        <input class="form-control form-control-lg" type="date" id="offerFirstDay" th:field="*{offerFirstDay}" th:errorclass="is-invalid" style="border-radius: 10px;" />
+                        <div class="invalid-feedback" th:if="${#fields.hasErrors('offerFirstDay')}">
+                            <ul>
+                                <li th:each="error: ${#fields.errors('offerFirstDay')}" th:text="${error}" />
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label fw-bold mb-2" for="offerLastDay">
+                            <i class="fa-regular fa-calendar-xmark text-warning me-2"></i>End date:
+                        </label>
+                        <input class="form-control form-control-lg" type="date" id="offerLastDay" th:field="*{offerLastDay}" th:errorclass="is-invalid" style="border-radius: 10px;" />
+                        <div class="invalid-feedback" th:if="${#fields.hasErrors('offerLastDay')}">
+                            <ul>
+                                <li th:each="error: ${#fields.errors('offerLastDay')}" th:text="${error}" />
+                            </ul>
+                        </div>
+                    </div>
+
+
+                    <hr class="text-white my-3">
+
+                    <div class="mt-5 mb-3 d-flex justify-content-between gap-3">
+                        <button type="submit" class="btn btn-primary btn-lg flex-grow-1" style="border-radius: 10px; font-weight: bold;">
+                            <i class="fas fa-paper-plane me-2"></i>Save
+                        </button>
+                        <button type="reset" class="btn btn-warning btn-lg flex-grow-1" style="border-radius: 10px; font-weight: bold;">
+                            <i class="fas fa-redo me-2"></i>Reset Fields
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+        </section>
+
+    </main>
+
+
+
+    <th:block th:replace="~{fragments/resources :: footerDisclaimer}" />
+    <th:block th:replace="~{fragments/resources :: popper}" />
+</body>
+
+</html>

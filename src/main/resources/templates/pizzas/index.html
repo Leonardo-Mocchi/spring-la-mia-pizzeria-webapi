@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <th:block th:replace="~{fragments/resources :: headTags}" />
+    <title>Our [[${pizzas.size()}]] Premium Pizzas</title>
+</head>
+
+<body class="pizzas-page bg-light-subtle text-dark" th:style="|background: linear-gradient(to bottom, rgba(0,0,0,0.5) 0%, rgba(0,0,0,0.95) 100%), url(https://www.tasteatlas.com/images/dishes/67a1f8a12ae9474194265ea5217e9b0b.jpg) no-repeat center center fixed; background-size: cover;|">
+
+    <header>
+        <th:block th:replace="~{fragments/navbar :: navbar('pizzas')}"></th:block>
+    </header>
+
+    <div class="container mt-5 " style="min-height: 600px;">
+        <div class="text-center mb-4 p-4" style="background: rgba(0, 0, 0, 0.6); border-radius: 15px; backdrop-filter: blur(10px);">
+            <h1 class="text-warning fw-bold display-4 mb-3" style="text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.8);">
+                <i class="fas fa-pizza-slice me-3"></i>Our Premium Italian Pizzas
+            </h1>
+            <p class="lead text-light">Discover our selection of <span class="badge bg-warning text-dark fs-5">[[${pizzas.size()}]]</span> authentic Italian pizzas</p>
+        </div>
+
+
+        <div class="d-flex flex-wrap gap-4 my-5">
+
+            <div th:if="${pizzas}" th:each="pizza : ${pizzas}" th:object="${pizza}" th:class="${pizza.id % 2 == 0 ? 'bg-light' : 'bg-dark text-light'} + ' card'" style="width: calc(33.333% - 1rem); position: relative; border-radius: 15px; overflow: hidden; border: 2px solid rgba(255, 193, 7, 0.3);">
+
+                <a th:href="@{/pizzas/edit/{id} (id=*{id})}" class="btn btn-warning" style="position: absolute; top: 10px; right: 10px; z-index: 10; border-radius: 10px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);">
+                    <i class="fas fa-edit"></i>
+                </a>
+
+                <!-- Modal trigger button -->
+                <button type="button" class="btn btn-danger" data-bs-toggle="modal" style="position: absolute; top: 60px; right: 10px; z-index: 10; border-radius: 10px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);" th:data-bs-target="'#delete-modal-' + *{id}">
+                    <i class="fa-solid fa-trash"></i>
+                </button>
+
+                <!-- Modal Body -->
+                <div class="modal fade" th:id="'delete-modal-' + *{id}" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false" role="dialog" aria-labelledby="delete-modal" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered">
+                        <div class="modal-content bg-dark text-light">
+                            <div class="modal-header">
+                                <h1 class="modal-title" id="modalTitleId">
+                                    Deleting "[[*{name}]]"
+                                </h1>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                Are you sure you want to delete the Pizza <strong>"[[*{name}]]"</strong>?
+                            </div>
+                            <div class="modal-footer">
+
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+
+                                <form class="d-inline-block" th:action="@{/pizzas/delete/{id}(id=*{id})}" method="post">
+                                    <button class="btn btn-danger" type="submit">
+                                        Permanently delete this Pizza
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <img th:src="*{picture}" class="card-img-top" th:alt="*{name}" style="height: 290px; object-fit: cover;">
+                <div class="card-body" style="min-height: 200px;">
+                    <h3 class="card-title mb-3">
+                        <i class="fas fa-pizza-slice" style="color: #ff6b35;"></i>
+                        <span th:text="*{name}" class="fw-bold" />
+                    </h3>
+                    <div class="card-text">
+                        <p class="m-0 fst-italic mb-3" th:text="*{description}" style="min-height: 80px;"></p>
+                        <p class="fs-5 fw-bold mb-3">
+                            <i class="fas fa-euro-sign text-success"></i>
+                            <span th:text="*{price}" class="ms-2 text-success"></span>
+                        </p>
+                    </div>
+                    <a th:href="@{'/pizzas/' + *{id}}" th:class="${pizza.id % 2 == 0 ? 'btn-warning' : 'btn-light'} + ' btn w-100'" style="border-radius: 10px; font-weight: bold;">
+                        <i class="fas fa-eye me-2"></i>View Details
+                    </a>
+                </div>
+            </div>
+
+            <div th:unless="${pizzas}" class="w-100 d-flex align-items-start justify-content-center mt-0" style="min-height: 500px;">
+                <div class="container p-5 border border-3 border-warning rounded-3 text-center" style="max-width: 900px; background: rgba(255, 193, 7, 0.1); backdrop-filter: blur(10px); box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);">
+                    <i class="fas fa-exclamation-triangle text-warning display-1 mb-4"></i>
+                    <h1><span class="text-danger fw-bold">Warning:</span> A Very Sad Day for Any Pizza Lover</h1>
+                    <p class="lead text-light mt-3">
+                        There is currently a problem with our server that is preventing you from seeing any pizzas. Please wait while we fix this issue.
+                    </p>
+                </div>
+            </div>
+
+        </div>
+        <div class="text-light my-5 pb-5 text-center p-4" style="background: rgba(0, 0, 0, 0.6); border-radius: 15px; backdrop-filter: blur(10px);">
+            <h1 class="mb-4">
+                <i class="fas fa-search me-2"></i>Didn't Find Your Perfect Pizza?
+            </h1>
+            <a class="btn btn-success btn-lg px-5 py-3" th:href="@{/pizzas/create}" style="border-radius: 50px; font-weight: bold; box-shadow: 0 5px 15px rgba(25, 135, 84, 0.4);">
+                <i class="fas fa-plus-circle me-2"></i>Request a Custom Pizza
+            </a>
+        </div>
+    </div>
+
+
+    <th:block th:replace="~{fragments/resources :: footerDisclaimer}" />
+    <th:block th:replace="~{fragments/resources :: popper}" />
+</body>
+
+</html>

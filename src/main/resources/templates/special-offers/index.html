@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <th:block th:replace="~{fragments/resources :: headTags}" />
+    <title>Our [[${offersQuantity}]] SPECIAL Offers</title>
+</head>
+
+<body class="pizzas-page bg-light-subtle text-dark" th:style="|background: linear-gradient(to bottom, rgba(0,0,0,0.5) 0%, rgba(0,0,0,0.95) 100%), url(https://www.tasteatlas.com/images/dishes/67a1f8a12ae9474194265ea5217e9b0b.jpg) no-repeat center center fixed; background-size: cover;|">
+
+    <header>
+        <th:block th:replace="~{fragments/navbar :: navbar('offers')}"></th:block>
+    </header>
+
+    <div class="container mt-5" style="min-height: 600px;">
+        <div class="text-center mb-4 p-4" style="background: rgba(0, 0, 0, 0.6); border-radius: 15px; backdrop-filter: blur(10px);">
+            <h1 class="text-warning fw-bold display-4 mb-3">Our SPECIAL Offers</h1>
+            <p class="text-light">Total offers: <span th:text="${howmany}">0</span></p>
+        </div>
+
+        <div class="table-responsive mt-4 pb-2 mb-5">
+            <table class="table table-dark table-striped table-hover">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Title</th>
+                        <th>Pizza</th>
+                        <th>Start</th>
+                        <th>End</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="offer : ${offers}">
+                        <td th:text="${offer.id}">1</td>
+                        <td th:text="${offer.title}">Title</td>
+                        <td>
+                            <a th:href="@{/pizzas/{id}(id=${offer.pizza.id})}" th:text="${offer.pizza.name}">Pizza Name</a>
+                        </td>
+                        <td th:text="${offer.offerFirstDay}">2025-01-01</td>
+                        <td th:text="${offer.offerLastDay}">2025-01-15</td>
+                        <td>
+                            <a class="btn btn-sm btn-primary" th:href="@{/special-offers/{id}(id=${offer.id})}">View</a>
+                            <a class="btn btn-sm btn-warning" th:href="@{/special-offers/edit/{id}(id=${offer.id})}">Edit</a>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+
+    <th:block th:replace="~{fragments/resources :: footerDisclaimer}" />
+    <th:block th:replace="~{fragments/resources :: popper}" />
+</body>
+
+</html>
