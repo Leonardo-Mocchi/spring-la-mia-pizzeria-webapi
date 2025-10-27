@@ -3,7 +3,7 @@ package org.lessons.java.spring_la_mia_pizzeria_webapi.controllers;
 import java.util.List;
 
 import org.lessons.java.spring_la_mia_pizzeria_webapi.model.SpecialOffer;
-import org.lessons.java.spring_la_mia_pizzeria_webapi.repository.SpecialOffersRepository;
+import org.lessons.java.spring_la_mia_pizzeria_webapi.service.SpecialOfferService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -21,7 +21,26 @@ import jakarta.validation.Valid;
 public class SpecialOfferController {
 
     @Autowired
-    private SpecialOffersRepository specialOffersRepository;
+    private SpecialOfferService specialOfferService;
+
+    // > INDEX
+    @GetMapping
+    public String index(Model model) {
+
+        List<SpecialOffer> specialOffers = specialOfferService.findAll();
+
+        model.addAttribute("offers", specialOffers);
+        model.addAttribute("offersQuantity", specialOffers.size());
+        return "/special-offers/index";
+    }
+
+    // > SHOW
+    @GetMapping("/{id}")
+    public String show(@PathVariable Integer id, Model model) {
+
+        model.addAttribute("offer", specialOfferService.getById(id));
+        return "/special-offers/show";
+    }
 
     // > STORE
     @PostMapping("/create")
@@ -32,17 +51,16 @@ public class SpecialOfferController {
         if (bindingresult.hasErrors()) {
             return "/special-offers/create-or-edit";
         }
+        specialOfferService.create(formSpecialOffer);
 
-        specialOffersRepository.save(formSpecialOffer);
-
-        return "redirect:/pizzas/" + formSpecialOffer.getPizza().getId();
+        return "redirect:/special-offers/" + formSpecialOffer.getPizza().getId();
     }
 
     // > EDIT
     @GetMapping("/edit/{id}")
     public String edit(@PathVariable Integer id, Model model) {
 
-        model.addAttribute("specialOffer", specialOffersRepository.findById(id).get());
+        model.addAttribute("specialOffer", specialOfferService.findById(id).get());
         model.addAttribute("edit", true);
         return "/special-offers/create-or-edit";
     }
@@ -56,30 +74,8 @@ public class SpecialOfferController {
         if (bindingResult.hasErrors()) {
             return "/special-offers/create-or-edit";
         }
+        specialOfferService.update(formSpecialOffer);
 
-        specialOffersRepository.save(formSpecialOffer);
-
-        return "redirect:/pizzas/" + formSpecialOffer.getPizza().getId();
-
+        return "redirect:/special-offers/" + formSpecialOffer.getPizza().getId();
     }
-
-    // > INDEX
-    @GetMapping
-    public String index(Model model) {
-
-        List<SpecialOffer> specialOffers = specialOffersRepository.findAll();
-
-        model.addAttribute("offers", specialOffers);
-        model.addAttribute("offersQuantity", specialOffersRepository.count());
-        return "/special-offers/index";
-    }
-
-    // > SHOW
-    @GetMapping("/{id}")
-    public String show(@PathVariable Integer id, Model model) {
-
-        model.addAttribute("offer", specialOffersRepository.findById(id).get());
-        return "/special-offers/show";
-    }
-
 }
