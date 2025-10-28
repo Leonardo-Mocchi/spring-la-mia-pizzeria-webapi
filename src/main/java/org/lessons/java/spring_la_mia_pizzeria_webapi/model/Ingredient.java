@@ -2,7 +2,7 @@ package org.lessons.java.spring_la_mia_pizzeria_webapi.model;
 
 import java.util.List;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -32,7 +32,7 @@ public class Ingredient {
     private String description;
 
     @ManyToMany(mappedBy = "ingredients")
-    @JsonIgnore
+    @JsonBackReference
     private List<Pizza> pizzas;
 
     public Ingredient() {
